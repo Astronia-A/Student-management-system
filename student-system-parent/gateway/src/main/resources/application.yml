@@ -1,0 +1,23 @@
+server:
+  port: 8080 # 网关统一端口
+
+spring:
+  application:
+    name: student-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848 # Nacos 地址
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true # 开启从注册中心动态创建路由的功能
+      routes:
+        - id: student-service-route
+          uri: lb://service-student
+          predicates:
+            # 增加 /api/common/** 路径
+            - Path=/api/student/**, /api/user/**, /api/common/**, /api/file/**
+          filters:
+            - StripPrefix=1

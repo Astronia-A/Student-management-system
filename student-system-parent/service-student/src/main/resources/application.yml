@@ -1,0 +1,48 @@
+server:
+  port: 8081 # 学生业务模块端口
+
+spring:
+  application:
+    name: service-student # 在 Nacos 中显示的名称
+
+  # 1. 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 确保你已经创建了 student_system 数据库
+    url: jdbc:mysql://127.0.0.1:3306/student_system?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: 20231606
+
+  # 2. Redis 配置（用于验证码）
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: # 留空表示无密码
+    database: 0
+
+  # 3. Nacos 注册中心配置
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+  # 4. 文件上传大小限制（防止上传大课件时报错）
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# 5. MyBatis-Plus 配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 在控制台打印 SQL 日志，方便调试
+  global-config:
+    db-config:
+      id-type: auto # 对应数据库主键自增
+
+# 6. MinIO 自定义配置（注意：必须顶格写，不要缩进到 spring 节点里）
+minio:
+  endpoint: http://127.0.0.1:9000 # MinIO API 端口（默认 9000）
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: course
